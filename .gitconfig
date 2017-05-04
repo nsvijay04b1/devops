@@ -1,0 +1,16 @@
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[user]
+	name = Vijayakumar Naravula
+[user]
+	email = vijayakumar.naravula@amdocs.com
+[http]
+	sslCAinfo = C:\\Program Files\\Git\\etc\\pki\\ca-trust\\extracted\\openssl\\ca-bundle.trust.crt
+	proxy = http://genproxy.corp.amdocs.com:8080
+[color]
+	ui = auto
+[https]
+	proxy = https://genproxy.corp.amdocs.com:8080
