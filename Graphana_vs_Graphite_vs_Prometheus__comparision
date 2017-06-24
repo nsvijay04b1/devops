@@ -1,0 +1,111 @@
+
+source :-  https://www.loomsystems.com/single-post/2017/06/07/Prometheus-vs-Grafana-vs-Graphite---A-Feature-Comparison
+
+
+
+
+\\ Visualization and Dashboard Editing: \\
+
+
+Grafana: 
+In terms of visualization and dashboard creation and customization, Grafana is the best of all options. It is feature-rich, easy to use, and very flexible.
+
+Graphite:- 
+Good visualization options, but no dashboard editing included in its core functions. In the real world, Graphite is used in combination with Grafana; Graphite does the data storage, while Grafana does the visualization.
+
+Prometheus:- 
+Excellent, but it’s generally difficult to use the graph and dashboard editing features. Prometheus makes use of Console Templates for visualization and dashboard editing, but the learning curve of these Console Templates may be hard at first. In the real world, my recommendation is to start by using Grafana for the graph and dashboard editing and to later (when proficiency is reached) move to Prometheus console templates.
+ 
+The winner is:-
+Grafana wins here by a large margin, while Prometheus has to settle for second place.
+
+
+
+\\ Storage: \\
+
+
+Visualization is one part of the task, but we can’t visualize time series out of thin air. We need to obtain them from a source, and this source needs to somehow store all the time series and provide a way to query them:
+
+Grafana:-
+No time series storage support. Grafana is only a visualization solution. Time series storage is not part of its core functionality.
+
+Graphite:- This is where Graphite wins over Grafana. Graphite can store time series obtained from other sources (normally, direct monitoring tools) and provide a query language to obtain the stored data. Again, Grafana can be used with Graphite in order to visualize the data stored on its storage backend.
+
+Prometheus:- The king of the hill. The way Prometheus stores time series is the best by far (thanks to its dimensional model, which uses key-value tagging along the time series to better organize the data and offer strong query capabilities). As mentioned earlier, Grafana can be used with Prometheus query language in order to create graphs and dashboards.
+ 
+The winner is:-
+Prometheus excels here with Graphite finishing in second place, and Grafana as the absolute loser.
+
+
+\\ Data Collection:- \\
+
+Ok, you have both storage and visualization, but, you need to obtain the data from your services. This is where direct monitoring enters the scene. Either by using old methods (SNMP) or new ones (agents) you need a way to obtain the metrics that will eventually be stored as time series:
+
+Grafana:-
+No data collection support. Again, Grafana is only a visualization solution. Neither time series storage, nor time series gathering are part of its core functionality.
+
+Graphite:- No data collection support either, at least not directly. You need to include solutions like statd, collectd, and others in order to make the data collection part functional. Graphite will get all data from these sources, and store this data as time series in its storage backend.
+
+Prometheus:- The king has returned from its data collecting battles. Yes, Prometheus can do the data collection part along with the storage and visualization. It’s a very complete solution like other actors in the street (Cacti, Nagios, and Zabbix).
+ 
+The winner is:-
+Prometheus wins again while Graphite and Grafana both lose this race.
+
+
+Plug-in Architecture and Extensibility:
+One of the strongest points of all modern software solutions is the capability of being extended by the use of plugins or other similar means. This way, you can extend already available core functionality, and include a set of completely new functions in your solution:
+Grafana: Yes, supported, and with a big set of plugins applied to data sources, applications, and dashboard editing. More info here: https://grafana.com/plugins
+Graphite: Yes, in a certain way. Graphite does not really provide or have a plug-in library. Instead, there are a lot of tools that are already Graphite-compatible. More info at the following link: http://graphite.readthedocs.io/en/latest/tools.html
+Prometheus: Again, yes in a certain way. Prometheus calls them Exporters. The Exporters allow third party tools to export their data into Prometheus. Also, some software components in the open source world are already Prometheus-compatible. More information at the following link: https://prometheus.io/docs/instrumenting/exporters/
+ 
+The winner is: All of them, really. Grafana may be the one with real plugins which extend its core functionality, but there are a lot of tools that are in one way or another compatible with both Graphite and Prometheus.
+ 
+ 
+Alarming and Event Tracking:
+A monitoring solution is not complete, unless you include a way to generate alarms when any metric starts to act funny. Also, event tracking is a good way to relate repetitive events that can lead you to better diagnose problems in your infrastructure:
+Grafana: Nope, or at least not directly. Grafana can only visualize time series and it excels in this task over all other, but neither alarm management nor event tracking are part of its core functionality. Indirectly, there are ways to convert logs occurrences to numbers, which is a way to track events.
+Graphite: It can do event tracking, but it can’t directly do the alarm part.
+Prometheus: Complete support here for alarm management. While no direct event tracking is included, Prometheus’ very powerful query language allows you to perform some magic to indirectly do the event tracking part.
+ 
+The winner is: Prometheus all the way. Graphite finishes in second place and Grafana doesn’t even reach the finish line.
+ 
+ Cloud Monitoring Compatibility:
+Some clouds like AWS and OpenStack include their own monitoring infrastructure which gathers and stores time series and in some cases, provide basic graph and dashboard editing capabilities, as well. We don’t want to get into too much detail in this part of the article, so we’ll just talk about public clouds using AWS and private ones using OpenStack.
+ 
+The AWS monitoring service is called Cloudwatch, which includes not only the data storage for all its time series based metrics, but also includes a basic graph and dashboard editing.
+ 
+OpenStack (especially in its latest releases) includes Gnocchi, which is a “Time Series as a Service” solution, with no direct graph and editing component included yet. Let’s see how our three contenders can integrate themselves with both AWS and OpenStack.
+Grafana: Best solution so far. Due to the fact that both cloud solutions (AWS and OpenStack) already do the data gathering, data storage, and even the alarm management, the only thing you really need is visualization and dashboard creation. Grafana includes support (via plug-in) to both AWS Cloudwatch and OpenStack Gnocchi. If your deployment is completely cloud-based, and the monitoring solution is included (Cloudwatch or Gnocchi), don’t use anything else but Grafana.
+Graphite: Some components are already available in github that can be used to push AWS Cloudwatch data to Graphite, but again, this is really not necessary and a waste of time considering Cloudwatch is already available for the functions that Graphite would cover. For OpenStack, the community recommendation is to use Gnocchi only with Grafana. I’d recommend you not waste your time and stick with the already available monitoring options in the cloud.
+Prometheus: There is an official exporter for AWS Cloudwatch, so that you can monitor all your AWS cloud components with Prometheus if you wish to, but there is no support (yet) for OpenStack Gnocchi. It’s important to note that while Gnocchi supports both collectd and statsd (options with exporters in Prometheus), the support is unidirectional, meaning you can send collectd/statsd metrics to Gnocchi, but not the other way around.
+ 
+The winner is: Grafana is the real winner here with the other contenders tied for second place. Ideally, you should stick with the monitoring offering already available in the cloud, and only complement where needed. That’s the reason why Grafana is the best option here. Time series gathering and storage are already covered by both Cloudwatch and Gnocchi.
+ 
+ 
+Open source vs. enterprise
+It is a common practice in many open source projects to include some kind of enterprise/commercial offering with extra juice included. Let’s review what can be offered as an extra by our three contenders:
+Grafana: Open source model is feature-complete and enterprise-ready. There is no commercial specific version, but there is a hosted solution provided by Grafana and managed by them. More information about this at the following link: https://grafana.com/cloud/grafana
+Graphite: Open source model is feature-complete and enterprise ready.
+Prometheus: Like the other two, open source model is feature-complete and enterprise ready.
+ 
+The winner is: Grafana can be declared a winner due to the fact it offers a hosted option. But, if you consider that all options are feature-complete in their open source offerings, then all reach the finish line in first place.
+ 
+ 
+Final conclusions: All of this is OK, but now I’m very confused. What is the right solution for me?
+You’re probably getting a bad headache after reading this article. Don’t worry; we are going to alleviate it right now.
+ 
+What you need to do first is think about your actual scenario:
+ 
+Cloud services like AWS and OpenStack: If your infrastructure is completely cloud-based, and you already have available metrics from options like Cloudwatch or Gnocchi, don’t think too much: pick Grafana. You don’t need to store time series (this is already part of the cloud) or define alarms (again, this is another feature available on both AWS and OpenStack). What you need is to overcome the graphing limitations inherited from both Cloudwatch and Gnocchi, and display your metrics in a smart, usable, and feature-rich way. This is where Grafana excels over all other options.
+ 
+Classic infrastructure with basic data-collecting solutions: If your infrastructure is using things like collectd, statd, or other similar data-collection-only tools, and provided they can be used by Graphite, then use Graphite for doing the time-series storage part in a centralized server and  add Grafana to your mix in order to show those metrics in a proper way. Note that Graphite can do event tracking, but this is not the same as alarm generation so you will need something else to do this task.
+ 
+Any infrastructure without any kind of monitoring: If you are starting from scratch, and you have no other monitoring options available (or you don’t want to use cloud-based systems like Cloudwatch or Gnocchi), then go with Prometheus. Initially, you can add Grafana in order to ease your graph and dashboards editing until you are fully proficient with the use of Prometheus Console Templates.
+ 
+ 
+Our last recommendation for you is simple: adapt the right tool for the right scenario. Set your priorities with clarity and balance them with what you already have at hand. Don’t try to reach the center of the galaxy if what you really need is to land on the moon, but be prepared to go further if your current scenario evolves and you need to evolve your monitoring stack alongside your infrastructure monitoring needs.
+ 
+ 
+ 
+
+
