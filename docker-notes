@@ -3,6 +3,7 @@
 Cannot connect to the Docker daemon at tcp://192.168.1.70:2375. Is the docker daemon running?
 
 
+Solution :-
 
 After the installation finishes, Docker usually starts up on its own, but for the next part to work you will need to stop it.
 
@@ -10,7 +11,7 @@ sudo service docker stop
 
 Then run the daemon with the following command:
 
-sudo nohup docker daemon -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock &
+sudo nohup docker daemon -H tcp://192.168.1.70:2375 -H unix:///var/run/docker.sock &
 
 To make working with Docker easier, you should add your username to 
 the Docker users group. Adding a user to the group can be done with the 
@@ -18,6 +19,22 @@ command underneath by replacing the with your username.
 sudo usermod -aG docker
 
 
-It wors!!!
+It works!!!
 
+
+"docker-compose up"  fails with below error
+
+Traceback (most recent call last):
+  File "bin/docker-compose", line 3, in <module>
+  File "compose/cli/main.py", line 68, in main
+  File "compose/cli/main.py", line 115, in perform_command
+  File "compose/cli/command.py", line 37, in project_from_options
+  File "compose/cli/command.py", line 99, in get_project
+  File "compose/cli/command.py", line 71, in get_client
+  File "compose/cli/docker_client.py", line 95, in docker_client
+  File "site-packages/docker/api/client.py", line 103, in __init__
+  File "site-packages/docker/utils/utils.py", line 373, in parse_host
+docker.errors.DockerException: Bind address needs a port: 192.168.1.70
+
+Solution :-  export DOCKER_HOST=192.168.1.70:2375
 
