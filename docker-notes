@@ -1,0 +1,23 @@
+
+[vagrant@centos73 root]$ docker info
+Cannot connect to the Docker daemon at tcp://192.168.1.70:2375. Is the docker daemon running?
+
+
+
+After the installation finishes, Docker usually starts up on its own, but for the next part to work you will need to stop it.
+
+sudo service docker stop
+
+Then run the daemon with the following command:
+
+sudo nohup docker daemon -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock &
+
+To make working with Docker easier, you should add your username to 
+the Docker users group. Adding a user to the group can be done with the 
+command underneath by replacing the with your username.
+sudo usermod -aG docker
+
+
+It wors!!!
+
+
